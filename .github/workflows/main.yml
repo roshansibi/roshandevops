@@ -1,13 +1,29 @@
-name: Deploy to GitHub pageson:
+name: Build and Deploy
+
+on:
   push:
-   
-    branches: [ main ]jobs:
+    branches:
+      - master
+
+jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v2
-    - name: Run a multi-line script
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build and Deploy
       run: |
-        echo test the checkout action,
-        ls -a
+        echo "Build completed."
+        
+    - name: Commit changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git checkout master
+        git add index.html
+        git commit -m "Update index.html"
+        git push origin master
+
    
