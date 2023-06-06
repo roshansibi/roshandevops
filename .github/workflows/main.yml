@@ -3,7 +3,7 @@ name: main
 on: push
 
 jobs:
-  super-lint:
+  main:
     name: Lint code base
     runs-on: ubuntu-latest
     steps:
