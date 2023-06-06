@@ -1,19 +1,13 @@
-name: main
-
-on: push
-
-jobs:
-  main:
-    name: Lint code base
+name: Deploy to GitHub pageson:
+  push:
+   
+    branches: [ main ]jobs:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Run main
-        uses: github/main@v4
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+    - uses: actions/checkout@v2
+    - name: Run a multi-line script
+      run: |
+        echo test the checkout action,
+        ls -a
    
