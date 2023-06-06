@@ -1,0 +1,23 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Deploy to web server
+      uses: appleboy/scp-action@master
+      with:
+        host: your-server-ip
+        username: your-username
+        password: ${{ secrets.SERVER_PASSWORD }} # or use SSH key authentication
+        source: index.html
+        target: /var/www/html/
