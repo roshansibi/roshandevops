@@ -16,8 +16,8 @@ jobs:
     - name: Deploy to web server
       uses: appleboy/scp-action@master
       with:
-        host: your-server-ip
-        username: your-username
-        password: ${{ secrets.SERVER_PASSWORD }} # or use SSH key authentication
+        host: 192.168. 1.2
+        username: roshansibi
+        password: ${{ secrets.SERVER_PASSWORD }} 
         source: index.html
-        target: /var/www/html/
+        target: https://github.com/roshansibi/roshandevops/blob/master/index.html
