@@ -1,0 +1,27 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build and Deploy
+      run: |
+        echo "Build completed."
+        
+    - name: Commit changes
+      run: |
+        git config --global user.name "roshansibi"
+        git config --global user.email "roshansibi1234@.com"
+        git checkout master
+        git add index.html
+        git commit -m "Update index.html"
+        git push origin master
