@@ -1,5 +1,6 @@
-name: Deploy to EC2
+name: Push-to-EC2-1
 
+# Trigger deployment only on push to main branch
 on:
   push:
     branches:
@@ -7,26 +8,18 @@ on:
 
 jobs:
   deploy:
+    name: Deploy to EC2 on main branch push
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout the files
         uses: actions/checkout@v2
 
-      - name: Install SSH client
-        run: sudo apt-get install -y openssh-client
-
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-        with:
-          host: ${{ secrets.HOST_NAME_1 }}
-          username: ${{ secrets.USER_NAME }}
-          key: ${{ secrets.AWS_PRIVATE_KEY}}
-          script: |
-            cd /var/www/html
-            git pull origin main
-            sudo service apache2 restart
+        env:
+           PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+           HOSTNAME : ${{ secrets.HOSTNAME  }}
+           USER_NAME : ${{ secrets.USER_NAME  }}
+           script: |
+             cd /var/www/html
+             git pull origin main
+             sudo service apache2 restart
