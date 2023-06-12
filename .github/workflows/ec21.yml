@@ -22,8 +22,6 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Connect to EC2 instance
-        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_NAME_1 }}
           username: ${{ secrets.USER_NAME }}
