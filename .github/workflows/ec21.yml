@@ -16,7 +16,7 @@ jobs:
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@main
-        with:
+        env:
           host: ${{ secrets.HOST_NAME_1 }}
           username: ${{ secrets.USER_NAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
