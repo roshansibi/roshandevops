@@ -1,27 +1,50 @@
-name: Push-to-EC2
-
+name: Push-to-EC2-1
+ 
+ # Trigger deployment only on push to main branch
 on:
-  push:
-    branches:
-      - main
+   push:
+     branches:
+       - main
 
 jobs:
-  deploy:
-    name: Deploy to EC2 on main branch push
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout the files
-        uses: actions/checkout@v2
-
-      - name: Deploy to EC2
-       
-        env:
-          host: ${{ secrets.HOST_NAME_1 }}
-          username: ${{ secrets.USER_NAME }}
-          key: ${{ secrets.AWS_PRIVATE_KEY }}
-         
-          script: |
-            cd /var/www/html
-            git pull origin main
-            sudo service apache2 restart
+   deploy:
+     name: Deploy to EC2 on main branch push
+     runs-on: ubuntu-latest
+ 
+     steps:
+       - name: ssh and do stuff
+         run: |
+           sudo apt install sshpass -y
+           echo "-----BEGIN RSA PRIVATE KEY-----
+                 MIIEpAIBAAKCAQEAtF3kuXCC0Y10W7pjIEpnn9chPGDQnnWVVGiaVM9XpsxgW89Z
+                 s4JwPzTmIZiRGPuaFMSBCmJRUnkz2E3PO6KhprXT68/QzF2BEGkhT2uvawX75aNa
+                 YrQkvRjJadF/1tgGrkwPhjFKIDN/KpJYjHhlYPIpv0+gKNhrcAlVnrgqC7zdxT3Z
+                 GqVFVRhFudEsT5sQVatNi3P+/2M2ts7eWQJGRLgKKxhB2BUhUZjpk5G//FePlmp7
+                 Z/3rUcde1nNDv9gVQDJz1i3FRufIY0K/KkvsXg3/0A/9Jb8iNk7MjNf9ZfxtmYpG
+                 SFRKFja9rvG/S+g9ZHUa+U9i/jEJtfdC09GU+wIDAQABAoIBAQCFREbmeWo/ORw7
+                 Vlk9l5w/Lu4gtYwPOOPwLSWy+kxSMvoTe/5UM1GKciSDuD2lTunG5HZP3Nsna+RR
+                 sxQmhQCZtAl0V+V3yrK9FGCHVRKUqiQ3xV3YRjBLA9B1/lRNwuoUyKBDz5Fsf4A7
+                 TUxd5etKGUOdVlEJPPcNHeiEUKDIcDJkgY4hBoBS77UlHmrLJ8u7TgNlBwlhgxmS
+                 0lZHmQL8nUiAd+KSDiCxFfa0nRHgCI/gJmh8gjiMn1NhWm3WyuGs7Y0NJ3Q+CujY
+                 AcmeZOJeY3YXTYxA83R7M/2eDbzx8WK38aODvhoXmJfk0C76rMTjjKpyPeGt7Ors
+                 4dhHQyvpAoGBAOnJR1TXbja1dck952c8yntm9dirv9PdliIHSNvFJeFiOsxvYD4+
+                 w1VJClSELc4hf3sItC8nACj0yeE9veoTf5B4o0zMoK3TsD7wl5EhhgXn6hwBFu+E
+                 feFNAQ+Vc+WgRoaM40tCP6yZddnlgirYk+mTjfBvUzRuNevk3XeDaQ31AoGBAMWB
+                 NzJUsJDYJlu+gIQ5KAp86xTh2RFbM7eaM9fMLzElNN1xHDgDEmT49n/mRs6SEdlZ
+                 TZiIDUqXx4oUiRgMNjc+whnX2QiY03b4oEqGCNTodi5Iun4EpbBXg5A9gzHdM/5A
+                 TqGg0KJB71C9PSqlzEky1OqV89mzXKheGBoBt9EvAoGAO7kFlfDq4OL+UgiUYtUu
+                 zNOCnnVRref/gHXn8OyuPqN/bdZN+djCwbjFAM47fVslW+LfVORbsBrIr9e7+l48
+                 ykVnQilMKtvXPFzt+09bE4spTToiB9IK7lFjof2F+/Uzzw+SyRkFdyxE5QMye4uU
+                 Tak6K1/lG5HECJ0QzoUtgzkCgYAtI2T8CcL4t428tgMlNPLjwrzvXtZ/Uvq04Xcr
+                 wKygbMJyQaGTY5BWp1eez4ArQdL2e6RyUdXH0Hx4IE1cw524bo1p3pzpjBP4QsZP
+                 geaO0joARfrpRiKf9MBKvOQ5BzcUypmt8tT74FnTeAx8rLvNluJ2YqMChC2PBUI4
+                 31+lXQKBgQDYWoaCTnJ5fBx3QjH9L3bodnJTCJyXECCW80CxOwJnliq7RLyBwtLH
+                 RV2hNMGmyT4CHSHtoFN/SiViCnn1oC2oOJ2NgedLrnEHOTpwvZuZ7zylyJY/Q5ow
+                 hxkk0+MZZM3gPc+BwnVh9RXuFqTm8Djt0UHdrxL3YnplRrVKHofygw==
+                 -----END RSA PRIVATE KEY-----" > key.pem
+           chmod 400 key.pem
+           #/usr/bin/sshpass -p {{ secrets.AWS_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no ec2-user@107.22.140.93
+           ssh -i "key.pem" ec2-user@ec2-34-229-108-35.compute-1.amazonaws.com
+           git clone https://github.com/roshansibi/roshandevops.git
+           mv roshandevops/index.html /var/www/html
+           sudo service httpd restart
