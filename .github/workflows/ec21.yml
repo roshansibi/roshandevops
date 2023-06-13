@@ -20,7 +20,7 @@ jobs:
           host: ${{ secrets.HOST_NAME_1 }}
           username: ${{ secrets.USER_NAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
-          port: 22
+         
           script: |
             cd /var/www/html
             git pull origin main
